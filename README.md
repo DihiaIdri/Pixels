@@ -7,9 +7,9 @@ H and W, respectively.
 
 
 ###Pixel dimension
-####1. Enter the size of the poster
-####2. Enter the size of the desired pixel 
-####3. The code will tell you if that size is possible or not, because you want all pixels to fit in perfectly
+#### 1. Enter the size of the poster
+#### 2. Enter the size of the desired pixel 
+#### 3. The code will tell you if that size is possible or not, because you want all pixels to fit in perfectly
    1. Verify if each input pixel dimension is a divisor of the respective poster dimension.
       1. If it is not: find a lower and upper bound of acceptable pixel dimensions
       2. You will be prompted to select the combination of dimensions (height and width of the pixel) to try

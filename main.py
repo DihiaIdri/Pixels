@@ -38,7 +38,7 @@ def main(H, W, hp, wp):
             if satisfied == 'Yes' or satisfied == 'yes':
                 im_size_adjust_pixel.save('/Users/dihiaidrici/Desktop/SecondPaper/PixelFigure.tif')
         else:
-            print("You made a mistake selecting the height or width of the pixels. Try again ")
+            print("You made a mistake selecting the height or width of the pixels. Try again. if you changed your mind about the pixel dimensions stop and try again")
 
 
 def sizeAdjust(im, mul_h, mul_w, num_h_pixel, num_w_pixel):

@@ -6,7 +6,7 @@ the pixel dimensions you input, hp and wp, are divisors of the poster dimensions
 H and W, respectively. 
 
 
-###Pixel dimension
+### Pixel dimension
 #### 1. Enter the size of the poster
 #### 2. Enter the size of the desired pixel 
 #### 3. The code will tell you if that size is possible or not, because you want all pixels to fit in perfectly

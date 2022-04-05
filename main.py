@@ -3,65 +3,78 @@ import numpy as np
 
 
 def main(H, W, hp, wp):
-    # Need the pixel dimensions to be an integer divisor of the poster dimension
-    poster_D = [H, W]
-    pixel_D = [hp, wp]
+    poster_D = [H, W]  # poster Dimensions
+    pixel_D = [hp, wp]  # pixel Dimensions
     # Column for H & W, Rows for min and max
     final_D = np.zeros((2, 2))
-    final_num = np.zeros((2, 2))
 
     for i in range(2):
         if poster_D[i] % pixel_D[i] == 0:
             final_D[0][i] = pixel_D[i]
             final_D[1][i] = pixel_D[i]
-            final_num[0][i] = poster_D[i] / pixel_D[i]
-            final_num[1][i] = poster_D[i] / pixel_D[i]
         else:
-            [p_min, p_max] = min_max(poster_D[i], pixel_D[i])
-            final_D[0][i] = p_min
-            final_D[1][i] = p_max
-            final_num[0][i] = poster_D[i] / p_min
-            final_num[1][i] = poster_D[i] / p_max
+            # find acceptable pixel dimensions, Column for H & W, Rows for min and max
+            [size_min, size_max] = min_max(poster_D[i], pixel_D[i])
+            final_D[0][i] = size_min
+            final_D[1][i] = size_max
 
     print("Potential Pixel size in cm")
     print(final_D)
-    print("Number of pixels for each dimension")
-    print(final_num)
+    print("Remember that the smaller the size of the pixel, the more pixels there will be.")
     satisfied = 'No'
     while satisfied == 'No' or satisfied == 'no':
         h_pixel = int(input("Enter the height of the pixel i.e.first column of pixel dimension: "))
         w_pixel = int(input("Enter the width of the pixel i.e.second  column of pixel dimension: "))
+
         if (h_pixel == final_D[0][0] or h_pixel == final_D[1][0]) and (w_pixel == final_D[0][1] or w_pixel == final_D[1][1]):
-            im = poster(poster_D, h_pixel, w_pixel)
+            num_h_pixel = int(poster_D[0] / h_pixel)
+            num_w_pixel = int(poster_D[1] / w_pixel)
+            im = poster(num_h_pixel, num_w_pixel)
             im.show()
+            im_size_adjust_pixel = sizeAdjust(im, h_pixel, w_pixel, num_h_pixel, num_w_pixel)
+            im_size_adjust_pixel.show()
+
             satisfied = input("Are you satisfied? Yes or No?: ")
-            if satisfied == 'Yes' or satisfied =='yes':
-                im.save('/Users/dihiaidrici/Desktop/SecondPaper/PixelFigure.tif')
+            if satisfied == 'Yes' or satisfied == 'yes':
+                im_size_adjust_pixel.save('/Users/dihiaidrici/Desktop/SecondPaper/PixelFigure.tif')
         else:
             print("You made a mistake selecting the height or width of the pixels. Try again ")
 
-def poster(poster_D, h_pixel, w_pixel):
-    h_pixel_num = int(poster_D[0] / h_pixel)
-    w_pixel_num = int(poster_D[1] / w_pixel)
+
+def sizeAdjust(im, mul_h, mul_w, num_h_pixel, num_w_pixel):
+    hBig = num_h_pixel*mul_h
+    wBig = num_w_pixel*mul_w
+    imarray = np.zeros((hBig, wBig, 3))
+    for x in range(num_w_pixel):  # Horizontal, column
+        idx = mul_w*x
+        for y in range(num_h_pixel):  # Vertical, rows
+            idy = mul_h*y
+            imarray[idy:idy + mul_h, idx:idx + mul_w] = imarray[idy:idy + mul_h, idx:idx + mul_w] + im.getpixel((x, y))
+
+    large_pixelImage = Image.fromarray(imarray.astype('uint8'))  # .convert('RGBA')
+    return large_pixelImage
+
+
+def poster(num_h_pixel, num_w_pixel):
     # produce random pixel image. 255 is for an 8bit image. for 16bit it would be more
-    imarray = np.random.rand(h_pixel_num, w_pixel_num, 3) * 255
-    newImage = Image.fromarray(imarray.astype('uint8'))  # .convert('RGBA')
-    return newImage
+    imarray = np.random.rand(num_h_pixel, num_w_pixel, 3) * 255
+    pixelImage = Image.fromarray(imarray.astype('uint8'))  # .convert('RGBA')
+    return pixelImage
 
 
 def min_max(poster_i, p_i):
-    for p_min in range(p_i, 0, -1):
-        if poster_i % p_min == 0:
+    for size_min in range(p_i, 0, -1):
+        if poster_i % size_min == 0:
             break
-    for p_max in range(p_i, poster_i+1, 1):
-        if poster_i % p_max == 0:
+    for size_max in range(p_i, poster_i+1, 1):
+        if poster_i % size_max == 0:
             break
-    return p_min, p_max
+    return size_min, size_max
 
 
 if __name__ == '__main__':
-    H = 1000  # cm
-    W = 1000  # cm
-    hp = 3  # cm
-    wp = 5  # cm
+    H = 100  # cm
+    W = 100  # cm
+    hp = 5  # cm
+    wp = 3  # cm
     main(H, W, hp, wp)

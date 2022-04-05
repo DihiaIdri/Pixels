@@ -37,6 +37,12 @@ def main(H, W, hp, wp):
             satisfied = input("Are you satisfied? Yes or No?: ")
             if satisfied == 'Yes' or satisfied == 'yes':
                 im_size_adjust_pixel.save('/Users/dihiaidrici/Desktop/SecondPaper/PixelFigure.tif')
+                f = open('/Users/dihiaidrici/Desktop/SecondPaper/PosterDimensions', 'w')
+                f.write('Poster dimensions in cm:\n')
+                f.writelines(str(poster_D))
+                f.write('\n')
+                f.write('Pixel dimensions in cm:\n')
+                f.writelines(str(pixel_D))
         else:
             print("You made a mistake selecting the height or width of the pixels. Try again. if you changed your mind about the pixel dimensions stop and try again")
 
@@ -73,8 +79,8 @@ def min_max(poster_i, p_i):
 
 
 if __name__ == '__main__':
-    H = 100  # cm
-    W = 100  # cm
+    H = 1000  # cm
+    W = 1000  # cm
     hp = 5  # cm
     wp = 3  # cm
     main(H, W, hp, wp)

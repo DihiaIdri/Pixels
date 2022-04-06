@@ -17,5 +17,5 @@ H and W, respectively.
       4. You will be prompted to type whether you like it "YES" or not "NO"
       5. If you do not like it, you will be prompted to try another combination of "acceptable" dimensions. 
       6. The same process will repeat itself until you are satisfied "YES"
-      7. A poster with a PNG (can be modified)  format will be saved as well as a text file containing the 
+      7. A poster with a PNG (can be modified) format will be saved as well as a text file containing the 
       dimensions (so you don't forget) in a directory of your choosing

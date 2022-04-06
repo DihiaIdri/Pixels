@@ -29,14 +29,12 @@ def main(H, W, hp, wp):
         if (h_pixel == final_D[0][0] or h_pixel == final_D[1][0]) and (w_pixel == final_D[0][1] or w_pixel == final_D[1][1]):
             num_h_pixel = int(poster_D[0] / h_pixel)
             num_w_pixel = int(poster_D[1] / w_pixel)
-            im = poster(num_h_pixel, num_w_pixel)
+            im = poster(h_pixel, w_pixel, num_h_pixel, num_w_pixel)
             im.show()
-            im_size_adjust_pixel = sizeAdjust(im, h_pixel, w_pixel, num_h_pixel, num_w_pixel)
-            im_size_adjust_pixel.show()
 
             satisfied = input("Are you satisfied? Yes or No?: ")
             if satisfied == 'Yes' or satisfied == 'yes':
-                im_size_adjust_pixel.save('/Users/dihiaidrici/Desktop/SecondPaper/PixelFigure.tif')
+                im.save('/Users/dihiaidrici/Desktop/SecondPaper/PixelFigure.png')
                 f = open('/Users/dihiaidrici/Desktop/SecondPaper/PosterDimensions', 'w')
                 f.write('Poster dimensions in cm:\n')
                 f.writelines(str(poster_D))
@@ -47,25 +45,22 @@ def main(H, W, hp, wp):
             print("You made a mistake selecting the height or width of the pixels. Try again. if you changed your mind about the pixel dimensions stop and try again")
 
 
-def sizeAdjust(im, mul_h, mul_w, num_h_pixel, num_w_pixel):
+def poster(mul_h, mul_w, num_h_pixel, num_w_pixel):
     hBig = num_h_pixel*mul_h
     wBig = num_w_pixel*mul_w
+    # produce random pixel image. 255 is for an 8bit image. for 16bit it would be more
+    im = np.random.rand(num_h_pixel, num_w_pixel, 3) * 255
+    pixelImage = Image.fromarray(im.astype('uint8'))  # .convert('RGBA')
+
     imarray = np.zeros((hBig, wBig, 3))
     for x in range(num_w_pixel):  # Horizontal, column
         idx = mul_w*x
         for y in range(num_h_pixel):  # Vertical, rows
             idy = mul_h*y
-            imarray[idy:idy + mul_h, idx:idx + mul_w] = imarray[idy:idy + mul_h, idx:idx + mul_w] + im.getpixel((x, y))
+            imarray[idy:idy + mul_h, idx:idx + mul_w] = imarray[idy:idy + mul_h, idx:idx + mul_w] + pixelImage.getpixel((x, y))
 
     large_pixelImage = Image.fromarray(imarray.astype('uint8'))  # .convert('RGBA')
     return large_pixelImage
-
-
-def poster(num_h_pixel, num_w_pixel):
-    # produce random pixel image. 255 is for an 8bit image. for 16bit it would be more
-    imarray = np.random.rand(num_h_pixel, num_w_pixel, 3) * 255
-    pixelImage = Image.fromarray(imarray.astype('uint8'))  # .convert('RGBA')
-    return pixelImage
 
 
 def min_max(poster_i, p_i):
@@ -80,7 +75,7 @@ def min_max(poster_i, p_i):
 
 if __name__ == '__main__':
     H = 1000  # cm
-    W = 1000  # cm
-    hp = 5  # cm
-    wp = 3  # cm
+    W = 1500  # cm
+    hp = 4  # cm
+    wp = 7  # cm
     main(H, W, hp, wp)
